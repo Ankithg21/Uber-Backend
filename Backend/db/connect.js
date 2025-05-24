@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
     if(mongoose.connection.readyState) {
-        console.log('MongoDB is already connected');
+        console.log('Database is already connected');
         return;
     }
   try {
@@ -12,7 +12,7 @@ const connectDB = async () => {
     }
     console.log('Database connected successfully');
   } catch (error) {
-    console.error('MongoDB connection failed:', error.message);
+    console.error('Database connection failed:', error.message);
     process.exit(1);
   }
 }
