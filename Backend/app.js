@@ -5,6 +5,7 @@ const express = require("express");
 const app = express();
 const userRoutes = require("./routes/user.routes");
 const connectDB = require('./db/connect');
+const cookieParser = require("cookie-parser");
 
 // Database setup
 connectDB();
@@ -20,6 +21,7 @@ app.use(cors({
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type, Authorization",
 }));
+app.use(cookieParser());
 
 app.get("/", (req,res)=>{
     res.send("Welcome to the Backend Server!");
