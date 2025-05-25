@@ -30,8 +30,12 @@ const userSchema = mongoose.Schema({
     }
 });
 
-userSchema.methods.generateAuthToken = async function (){
-    return jwt.sign({_id: this._id}, process.env.JWT_SECRET);
+userSchema.methods.generateAuthToken = async function () {
+    return jwt.sign(
+        { _id: this._id },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' } 
+    );
 };
 
 userSchema.methods.verifyPassword =async function(password){
@@ -39,7 +43,7 @@ userSchema.methods.verifyPassword =async function(password){
 }
 
 userSchema.statics.hashPassword =async function(password){
-    return await bcrypt.hash(password, process.env.HASH_ROUND);
+    return await bcrypt.hash(password, Number(process.env.HASH_ROUND));
 };
 
 const userModel = mongoose.model("userModel", userSchema);

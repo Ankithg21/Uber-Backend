@@ -1,7 +1,18 @@
 const dotenv = require("dotenv");
 dotenv.config();
+
 const express = require("express");
 const app = express();
+const userRoutes = require("./routes/user.routes");
+const connectDB = require('./db/connect');
+
+// Database setup
+connectDB();
+
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 
 const cors = require("cors");
 app.use(cors({
@@ -13,5 +24,7 @@ app.use(cors({
 app.get("/", (req,res)=>{
     res.send("Welcome to the Backend Server!");
 });
+
+app.use("/users", userRoutes);
 
 module.exports = app;
