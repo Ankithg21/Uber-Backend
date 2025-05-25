@@ -18,7 +18,7 @@ const captionSchema = new mongoose.Schema({
         type:String,
         required: true,
         unique: true,
-        lowecase: true,
+        lowercase: true,
     },
     password:{
         type: String,
@@ -65,13 +65,13 @@ const captionSchema = new mongoose.Schema({
     },
 });
 
-captionSchema.methods.generateAuthToken = function(){
-    return jwt.sign(
-        {_id: this._id}, 
-        process.env.JWT_SECRET, 
-        {expiresIn: '24h'}
-    );
-}
+captionSchema.methods.generateAuthToken = function () {
+  return jwt.sign(
+    {_id: this._id},
+    process.env.JWT_SECRET,
+    { expiresIn: '24h' }
+  );
+};
 
 captionSchema.statics.hashPassword = async function(password){
     return await bcrypt.hash(password, Number(process.env.HASH_ROUND));
@@ -83,6 +83,4 @@ captionSchema.methods.verifyPassword = async function(password){
 
 const captionModel = mongoose.model("captionModel", captionSchema);
 
-module.exports = {
-    captionModel,
-}
+module.exports = captionModel;
