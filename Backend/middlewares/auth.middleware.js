@@ -1,6 +1,7 @@
 const userModel = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const blackListModel = require("../models/blacklistToken.model");
 
 const authUser = async(req, res, next)=>{
     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
@@ -9,7 +10,7 @@ const authUser = async(req, res, next)=>{
             {message: "Token not found-Unauthorized."},
         );
     }
-    const isblackListed = await userModel.findOne({token: token});
+    const isblackListed = await blackListModel.findOne({token: token});
     if(isblackListed){
         return res.status(400).json(
             {message: "please Login you are Unauthorized."},
