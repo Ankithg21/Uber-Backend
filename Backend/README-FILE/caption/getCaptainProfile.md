@@ -1,28 +1,18 @@
-# Caption (Driver) Login API Documentation
+# Caption Profile API Documentation
 
 ## Endpoint
 
-`POST /captions/login`
+`GET /captions/profile`
 
 ## Description
 
-Authenticates a caption (driver) using their email and password. Returns a JWT token and the caption object on successful login.
+Retrieves the profile information of the currently authenticated caption (driver). This route is protected and requires a valid JWT token.
 
-## Request Body
+## Authentication
 
-Send a JSON object with the following structure:
-
-```json
-{
-  "email": "john.doe@example.com",
-  "password": "yourpassword"
-}
-```
-
-### Field Requirements
-
-- `email`: string, required, must be a valid email address
-- `password`: string, required, minimum 3 characters
+- Requires a valid JWT token in either:
+  - Cookie: `token=<jwt_token>`
+  - Header: `Authorization: Bearer <jwt_token>`
 
 ## Responses
 
@@ -32,72 +22,50 @@ Send a JSON object with the following structure:
 - **Body:**
   ```json
   {
-    "token": "<jwt_token>",
-    "captainExist": {
-      "_id": "<caption_id>",
-      "fullname": {
-        "firstname": "John",
-        "lastname": "Doe"
-      },
-      "email": "john.doe@example.com",
-      "vehicle": {
-        "color": "Red",
-        "plate": "XYZ123",
-        "capacity": 4,
-        "vehicleType": "car"
-      }
+    "_id": "<caption_id>",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "XYZ123",
+      "capacity": 4,
+      "vehicleType": "car"
     }
   }
   ```
 
-### Validation Error
+### Unauthorized (No Token or Invalid Token)
 
-- **Status Code:** `400 Bad Request`
+- **Status Code:** `401 Unauthorized`
 - **Body:**
   ```json
-  {
-    "error": [
-      {
-        "msg": "Error message",
-        "param": "field",
-        "location": "body"
-      }
-    ]
-  }
+  { "message": "Token not found-Unauthorized." }
+  ```
+  or
+  ```json
+  { "message": "Unauthorized!" }
   ```
 
-### Caption Not Registered
+### Blacklisted Token
 
 - **Status Code:** `400 Bad Request`
 - **Body:**
   ```json
-  {
-    "message": "Caption not yet registered."
-  }
-  ```
-
-### Incorrect Password
-
-- **Status Code:** `400 Bad Request`
-- **Body:**
-  ```json
-  {
-    "message": "Incorrect password, please enter correct password."
-  }
+  { "message": "you are unauthorized, please login." }
   ```
 
 ## Example Request
 
 ```sh
-curl -X POST http://localhost:7777/captions/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "john.doe@example.com",
-    "password": "yourpassword"
-  }'
+curl -X GET http://localhost:7777/captions/profile \
+  -H "Authorization: Bearer <jwt_token>"
 ```
 
 ## Notes
 
-- All required fields must be provided for successful login.
-- The response includes a JWT token for authentication and the caption's details.
+- You must be logged in as a caption to access this endpoint.
+- The JWT token is required for authentication.
+- The response contains the caption's profile information as stored in the database.
