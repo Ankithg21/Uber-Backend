@@ -1,24 +1,24 @@
-const captionModel = require("../models/caption.models");
+const captainModel = require("../models/caption.models");
 const {validationResult} = require("express-validator");
-const captionService = require("../services/caption.service");
+const captainService = require("../services/caption.service");
 
-const registerCaption = async(req,res)=>{
+const registerCaptain = async(req,res)=>{
     const errors = validationResult(req.body);
     if(!errors.isEmpty()){
         return res.status(400).json({ error: errors.array() });
     }
     const {fullname, email, password, vehicle} = req.body;
 
-    const isCaptionAlreadyExist = await captionModel.findOne({email});
+    const isCaptionAlreadyExist = await captainModel.findOne({email});
     if(isCaptionAlreadyExist){
         return res.status(400).json(
             {message: "Caption already exist."},
         );
     }
 
-    const hashedPassowrd =await captionModel.hashPassword(password);
+    const hashedPassowrd =await captainModel.hashPassword(password);
 
-    const caption =await captionService.createCaption({
+    const captain =await captainService.createCaptain({
         firstname: fullname.firstname,
         lastname: fullname.lastname,
         email,
@@ -29,15 +29,15 @@ const registerCaption = async(req,res)=>{
         vehicleType: vehicle.vehicleType,
         
     });
-    const token = caption.generateAuthToken();
+    const token = captain.generateAuthToken();
 
     return res.status(201).json(
-        {token, caption},
+        {token, captain},
     );
 }
 
 
 module.exports = {
-    registerCaption,
+    registerCaptain,
 }
 

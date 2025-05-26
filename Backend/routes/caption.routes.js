@@ -1,4 +1,4 @@
-const captionController = require("../controllers/caption.controller");
+const captainController = require("../controllers/caption.controller");
 const express = require("express");
 const router = express.Router();
 const {body} = require("express-validator");
@@ -15,7 +15,7 @@ router.post(
         body("vehicle.capacity").isInt({min: 1}).withMessage("Capacity must be at least 1."),
         body("vehicle.vehicleType").isIn(["auto", "car", "motorcycle"]).withMessage("Vehicle type must be one of the following: auto, car, motorcycle.")
     ],
-    captionController.registerCaption
+    captainController.registerCaptain
 );
 
 module.exports = router;
