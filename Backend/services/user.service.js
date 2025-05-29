@@ -6,7 +6,7 @@ const createUser = async({fullname, email, password})=>{
     }
     const firstname = fullname.firstname;
     const lastname = fullname.lastname;
-    const user = userModel.create({
+    const user =await userModel.create({
         fullname:{
             firstname,
             lastname

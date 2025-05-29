@@ -3,7 +3,7 @@ const userService = require("../services/user.service");
 const {validationResult} = require("express-validator");
 const blackListTokenModel = require("../models/blacklistToken.model");
 
-const registerUser = async (req, res, next)=>{
+const registerUser = async (req, res)=>{
     const errors = validationResult(req.body);
     if(!errors.isEmpty()){
         return res.status(400).json({
@@ -11,7 +11,7 @@ const registerUser = async (req, res, next)=>{
         });
     }
     const {fullname, email, password} = req.body;
-    const isUserAlreadyExist = userModel.findOne({email});
+    const isUserAlreadyExist =await userModel.findOne({email: email});
     if(isUserAlreadyExist){
         return res.status(400).json(
             {message: "User already exist."},
